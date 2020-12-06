@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="chrome=1,ie=edge">
+    <meta name="viewport" content="width=720px">
+    <title>hwplayer1.0.0播放样例</title>
+    <link type="image/x-icon" rel="icon"
+        href="https://console.huaweicloud.com/static/framework/4.3.8/theme/default/images/favicon.ico">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        a:hover {
+            opacity: 1;
+        }
+
+        * {
+            transition-property: all;
+        }
+
+        .box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-between;
+            align-items: center;
+            font-family: "Microsoft YaHei";
+            background-color: #eeeeee;
+            min-height: 720px;
+            min-width: 720px;
+        }
+
+        .box-header,
+        .box-footer {
+            width: 100%;
+            background-color: #3d3e49;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .box-header {
+            line-height: 75px;
+            font-size: 28px;
+            padding: 0px 20px;
+        }
+
+        .box-header>.version {
+            font-size: 16px;
+        }
+
+        .box-footer {
+            font-size: 14px;
+            height: 150px;
+            text-align: center;
+        }
+
+        .box-footer>* {
+            display: inline-block;
+            width: 180px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .box-footer dd {
+            margin-left: 20px;
+            font-size: 12px;
+            line-height: 2em;
+            white-space: nowrap;
+        }
+
+        .box-footer dd img {
+            width: 50px;
+            height: 50px;
+            margin: 10px 10px 10px 0px;
+        }
+
+        .box-footer dd img:last-child {
+            margin-right: 0;
+        }
+
+        .box.no-flex>* {
+            position: absolute;
+        }
+
+        .box.no-flex>.box-header {
+            top: 0px;
+        }
+
+        .box.no-flex>.demo-box {
+            left: 50%;
+            top: 50%;
+            margin-top: -280px;
+            margin-left: -360px;
+        }
+
+        .box.no-flex>.box-footer {
+            bottom: 0px;
+        }
+
+        /*兼容ie全屏*/
+
+        #test.vjs-fullscreen {
+            top: 0;
+            left: 0;
+            margin: auto;
+        }
+
+        #test.video-js {
+            width: 640px;
+            height: 360px;
+            margin: 40px 40px;
+        }
+
+        .demo-box {
+            width: 720px;
+            height: 500px;
+            margin: auto;
+            font-size: 14px;
+            background-color: #ffffff;
+            box-shadow: -5px 5px 5px 0px #dddddd;
+        }
+
+        .playForm {
+            position: relative;
+            background-color: #f5f7fa;
+            /*background: linear-gradient(to left bottom, #eeeeee 50%, rgba(0, 0, 0, .4) 0) no-repeat 100% 0 / 32px 32px, linear-gradient(-135deg, transparent 24px, #f5f7fa 0);*/
+            padding: 0px 40px;
+            margin: 0;
+            line-height: 60px;
+            display: none;
+        }
+
+        .playForm>button,
+        .playForm>input {
+            height: 30px;
+            box-sizing: border-box;
+            vertical-align: middle;
+            outline: none;
+            padding: 0px 10px;
+        }
+
+        .playForm>button {
+            text-align: center;
+            line-height: 30px;
+            float: right;
+            margin: 15px 0px 15px 10px;
+            border: none;
+            color: #ffffff;
+            border-radius: 2px;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .playForm>button.clear {
+            background-color: #5f5e66;
+        }
+
+        .playForm>button.play {
+            background-color: #e40906;
+        }
+
+        .playForm>button:hover {
+            opacity: 1;
+        }
+
+        .playForm>input {
+            width: 400px;
+            line-height: 28px;
+        }
+
+        .tip {
+            position: absolute;
+            top: 60px;
+            left: 40px;
+            line-height: 40px;
+            font-size: 12px;
+            color: #f68300;
+        }
+    </style>x
+    <script src="../dist/hwplayer.js?hwplayerLibPath=/resource/hwplayer/1.3.0/lib/"></script>
+</head>
+
+<body>
+    <div class="box">
+        <div class="box-header">
+            华为云Web播放器DEMO
+            <span class="version">v1.0.0</span>
+        </div>
+
+        <div class="demo-box">
+            <div class="playForm">
+                <label for="playUrl">播放地址：</label><input id="playUrl" type="text"
+                    onkeyup="event.keyCode === 13 &&　play()" placeholder="请输入直播或点播地址" />
+                <button type="button" class="play" onclick="play()">播放</button>
+                <button type="button" class="clear"
+                    onclick="this.parentNode.querySelector('input').value=''">清空</button>
+                <span class="tip">提示信息：点播支持MP4，M3U8，MPD以及FLV格式，直播支持FLV，M3U8流格式。</span>
+            </div>
+            <video controls id="test" width="640" height="360" class="video-js vjs-default-skin vjs-big-play-centered">
+            </video>
+        </div>
+
+        <div class="box-footer">
+            <dl>
+                <dt>相关文档</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            <a href="https://support.huaweicloud.com/playersdk-vod/zh-cn_topic_0135451403.html"
+                                target="_blank">Web播放器</a>
+                        </li>
+                        <li>
+                            <a href="https://support.huaweicloud.com/playersdk-vod/zh-cn_topic_0155742285.html"
+                                target="_blank">Android播放器</a>
+                        </li>
+                        <li>
+                            <a href="https://support.huaweicloud.com/playersdk-vod/zh-cn_topic_0155742287.html"
+                                target="_blank">iOS播放器</a>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+            <!--
+            -->
+            <dl>
+                <dt>相关服务</dt>
+                <dd>
+                    <ul>
+                        <li><a href="https://www.huaweicloud.com/product/vod.html" target="_blank">视频点播</a></li>
+                        <li><a href="https://www.huaweicloud.com/product/live.html" target="_blank">视频直播</a></li>
+                        <li><a href="https://www.huaweicloud.com/product/mpc.html" target="_blank">媒体转码</a></li>
+                    </ul>
+                </dd>
+            </dl>
+            <!--
+            -->
+            <dl>
+                <dt>关注华为云</dt>
+                <dd style="margin-left: 0">
+                    <img src="./static/qr-wechat.jpg">
+                    <img src="./static/qr-weibo.jpg">
+                    <img src="./static/qr-zhihu.png" style="margin-right: 0">
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <script>
+        var hwPlayer;
+
+        hwplayerloaded(function () {
+            var player = new HWPlayer("test", {
+                width: 640,
+                height: 360,
+                userId: 'playerDemo01',
+                domainId: 'hwPlayer',
+                /**
+                 * 播放数据统计上报，用户可在初始化播放器时设置stat为true开启（建议开启）
+                 * 具体功能说明请参考：https://support.huaweicloud.com/playersdk-vod/zh-cn_topic_0149625030.html
+                 */
+                stat: true,
+                flvjs: {
+                    mediaDataSource: {
+                        isLive: true
+                    }
+                }
+            }, function () {
+                var playForm = document.querySelector(".playForm");
+
+                var url = getQueryString('url');
+                if (url == null) {
+                    player.updateSrc([{
+                        src: "https://media-cache.huaweicloud.com/video/hwplayer/0.0.6/videos/OP.mp4",
+                        type: 'video/mp4',
+                        label: '原画'
+                    }, {
+                        src: "https://media-cache.huaweicloud.com/video/hwplayer/0.0.6/videos/HD.mp4",
+                        type: 'video/mp4',
+                        label: '高清'
+                    }, {
+                        src: "https://media-cache.huaweicloud.com/video/hwplayer/0.0.6/videos/SD.mp4",
+                        type: 'video/mp4',
+                        label: '标清'
+                    }, {
+                        src: "https://media-cache.huaweicloud.com/video/hwplayer/0.0.6/videos/FLUENT.mp4",
+                        type: 'video/mp4',
+                        label: '流畅'
+                    }]);
+                }
+                else {
+                    var type = getType(url);
+                    var domInput = document.getElementById("playUrl");
+                    domInput.value = url;
+
+
+                    if (type) {
+                        player.updateSrc([{
+                            src: url,
+                            type: type,
+                            label: '自适应'
+                        }]);
+                        player.play();
+                    } else {
+                        player.src(url);
+                        player.play();
+                    }
+                }
+
+                playForm.style.display = "block";
+            });
+
+            hwPlayer = player;
+        });
+
+        (function () {
+            if (!('flexWrap' in document.documentElement.style) && !('flex-wrap' in document.documentElement.style)) document.querySelector(".box").className += " no-flex";
+        }());
+
+        /**
+         * 获取视频类型
+         * */
+        function getType(str) {
+            var index = str.lastIndexOf("?"),
+                type,
+                noParamUrl = index === -1 ? str : str.substr(0, index);
+
+            type = noParamUrl.substr(noParamUrl.lastIndexOf(".") + 1).toLocaleLowerCase();
+
+            if (type === "m3u8") {
+                return "application/x-mpegURL";
+            } else if (type === "mp4") {
+                return "video/mp4";
+            } else if (type === "flv") {
+                return "video/flv";
+            } else if (type === "mpd") {
+                return "application/dash+xml";
+            } else {
+                if (noParamUrl.substr(0, 4).toLocaleLowerCase() === "rtmp") {
+                    return "rtmp/flv";
+                }
+                return false;
+            }
+        }
+
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        }
+
+        /**
+         * 触发播放
+         */
+        function play() {
+            var url = document.getElementById("playUrl").value;
+            // hwPlayer.src(url);
+            // hwPlayer.play();
+            var type = getType(url);
+
+            if (type) {
+                hwPlayer.updateSrc([{
+                    src: url,
+                    type: type,
+                    label: '自适应'
+                }]);
+                hwPlayer.play();
+            } else {
+                hwPlayer.src(url);
+                hwPlayer.play();
+            }
+        }
+    </script>
+</body>
+
+</html>
