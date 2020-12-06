@@ -47,4 +47,12 @@ registerMicroApps(apps, {
   ]
 })
 setDefaultMountApp('/sub-vue')
-start()
+
+start({
+  excludeAssetFilter:function(src){
+    console.log("excludeAssetFilter",src)
+    if(src && src.includes("/resource/hwplayer")){
+      return true
+    }
+  }
+})
