@@ -3,6 +3,7 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
+      <router-link to="/map">Map</router-link> |
       <a href="#" @click="gotoSubReact" style="marin: 0 0 0 10px">跳转到sub-react</a>
     </div>
     <div>

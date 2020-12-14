@@ -20,13 +20,12 @@ export default {
       );
       setTimeout(() => {
         this.playerVideo();
-      }, 2000);
+      }, 3000);
     });
   },
   methods: {
     gotoSubReact() {},
     appendJQCDN(src) {
-      let attr = Symbol('attach-proxy-container');
       var head = document.head || document.getElementsByTagName("head")[0];
       if (src.indexOf("js") === -1) {
         var style = document.createElement("style");
@@ -38,7 +37,6 @@ export default {
         script.type = "text/javascript";
         script.setAttribute("src", src);
         script.setAttribute("async", true);
-        Object.defineProperty(script, attr, {value: 'Hello!'});
         head.appendChild(script);
       }
     },

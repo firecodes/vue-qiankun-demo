@@ -5,8 +5,12 @@ import routes from './router'
 import { store as commonStore } from 'common'
 import store from './store'
 import VueRouter from 'vue-router'
+import echarts from "echarts";
 
 Vue.config.productionTip = false
+
+Vue.prototype.$echarts = echarts;
+
 let instance = null
 
 function render (props = {}) {
